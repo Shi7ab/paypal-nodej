@@ -1,0 +1,26 @@
+name: CI/CD - Build & Push to Docker Hub
+
+on:
+  push:
+    branches:
+      - main   # Run pipeline only when pushing to main branch
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build Docker image
+        run: docker build -t shihab057/paypal-nodejs:latest .
+
+      - name: Push to Docker Hub
+        run: docker push shihab057/paypal-nodejs:latest
